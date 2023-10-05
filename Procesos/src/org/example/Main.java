@@ -47,6 +47,7 @@ public class Main {
             processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
             Process process = processBuilder.start();
             process.waitFor();
+
             System.out.println("Fin del proceso");
         }catch(IOException | InterruptedException e){
             System.out.println("Error al lanzar el proceso");
