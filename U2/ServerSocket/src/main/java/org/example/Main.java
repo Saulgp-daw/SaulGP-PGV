@@ -1,9 +1,12 @@
 package org.example;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Objects;
 import java.util.Scanner;
+import java.io.BufferedReader;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
@@ -16,60 +19,31 @@ public class Main {
         try {
             Socket clienteSocket = new Socket(servidorHost, puerto);
 
-
             // Flujo de salida para enviar datos al servidor
             PrintWriter salidaAlServidor = new PrintWriter(clienteSocket.getOutputStream(), true);
 
-            // Mensaje que se enviará al servidorç
+            // Flujo de entrada para recibir datos del servidor
+            BufferedReader entradaDesdeServidor = new BufferedReader(new InputStreamReader(clienteSocket.getInputStream()));
 
             String mensaje;
-            do{
+            do {
                 System.out.println("Texto: ");
-                 mensaje = sc.nextLine();
-                String mensajeCliente = mensaje;
-                salidaAlServidor.println(mensajeCliente);
-            }while(mensaje != "close");
+                mensaje = sc.nextLine();
+                salidaAlServidor.println(mensaje);
 
+                // Leer la respuesta del servidor
+                String respuestaDelServidor = entradaDesdeServidor.readLine();
+                System.out.println("Servidor: " + respuestaDelServidor);
 
-
+            } while (!mensaje.equals("EXIT"));
 
             // Cerrar conexiones
             salidaAlServidor.close();
+            entradaDesdeServidor.close();
             clienteSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
-        /*
-
-        public class ServidorTCP {
-    public static void main(String[] args) {
-        int puerto = 12345; // Puerto en el que el servidor escuchará
-
-        try {
-            ServerSocket servidorSocket = new ServerSocket(puerto);
-            System.out.println("Servidor esperando conexiones en el puerto " + puerto);
-
-            Socket clienteSocket = servidorSocket.accept(); // Espera a que un cliente se conecte
-            System.out.println("Cliente conectado desde: " + clienteSocket.getInetAddress());
-
-            // Flujo de entrada para recibir datos del cliente
-            BufferedReader entradaDesdeCliente = new BufferedReader(new InputStreamReader(clienteSocket.getInputStream()));
-
-            // Leer el mensaje del cliente
-            String mensajeCliente = entradaDesdeCliente.readLine();
-            System.out.println("Mensaje del cliente: " + mensajeCliente);
-
-            // Cerrar conexiones
-            entradaDesdeCliente.close();
-            clienteSocket.close();
-            servidorSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-}
-         */
     }
 }
