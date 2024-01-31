@@ -46,6 +46,7 @@ public class Cifrado {
 	}
 
 	public String cifrarMensaje(String mensaje){
+		//Cifrar: C=(P+K)mod26
 		String mensajeConClave = "";
 
 		int j = 0;
@@ -60,9 +61,9 @@ public class Cifrado {
 				j  = 0;
 			}
 		}
-		System.out.println("Mensaje como clave: " +this.mensajeConClave);
+//		System.out.println("Mensaje como clave: " +this.mensajeConClave);
 
-		for (int i = 0; i < mensaje.length()-1; i++){
+		for (int i = 0; i < mensaje.length(); i++){
 			char caracter = mensaje.toCharArray()[i];
 			int posAbecedario = abecedario.indexOf(caracter);
 
@@ -78,22 +79,44 @@ public class Cifrado {
 
 
 		}
-		System.out.println("Mensaje cifrado: " +mensajeCifrado);
-		System.out.println("-----------------------------------");
+//		System.out.println("Mensaje cifrado: " +mensajeCifrado);
+//		System.out.println("-----------------------------------");
 		return mensajeCifrado;
 	}
 
 	public String descifrar(String mensajeCifrado){
 		String mensajeDevuelto = "";
+		//Cifrar: C=(P+K)mod26
 		//P=(C−K)mod26
 		//LETRA REAL = (LETRA CIFRADA POS - CLAVE POS ) mod 27
-		System.out.println(this.mensajeConClave);
+//		System.out.println(this.mensajeConClave);
+//		System.out.println(mensajeCifrado);
 
-		for (int i = 0; i < mensajeCifrado.length()-1; i++){
-			System.out.println(mensajeCifrado.toCharArray()[i]);
+		for (int i = 0; i < mensajeCifrado.length(); i++){
+			char c = mensajeCifrado.toCharArray()[i];
+			char k = this.mensajeConClave.toCharArray()[i];
+			//System.out.println(c);
+
+			if(c != ' ' && k != ' '){
+				int numC = this.abecedario.indexOf(c);
+				int numK = this.abecedario.indexOf(k);
+
+//				System.out.println(c+ " "+numC);
+//				System.out.println(k+ " "+numK);
+				int numP = (numC - numK);
+				if(numP < 0){
+					numP += 27;
+				}
+				int res = numP % 27;
+				//System.out.println(res);
+				mensajeDevuelto += this.abecedario.charAt(res);
+			}else{
+				mensajeDevuelto += " ";
+			}
+
 
 		}
 
-		return mensajeCifrado;
+		return mensajeDevuelto;
 	}
 }
